@@ -48,7 +48,7 @@ module.exports = NodeHelper.create({
 		if (typeof self.fetchers[url] === "undefined") {
 			console.log("Create new calendar fetcher for url: " + url + " - Interval: " + fetchInterval);
 			fetcher = new CalendarFetcher(url, fetchInterval, excludedEvents, maximumEntries, maximumNumberOfDays, auth, showLocation, filterRegexOnly);
-
+ 
 			fetcher.onReceive(function(fetcher) {
 				//console.log('Broadcast events.');
 				//console.log(fetcher.events());

@@ -331,6 +331,7 @@ var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntri
 			}
 			filter = new RegExp(filter, regexFlags);
 			if(filterRegexOnly){
+				//WHY is this not working with filter? strange
 				const test = / *\([^)]*\) ([^\s]+) */gi;
 				//console.log(filter);
 				return title.replace(test, "");

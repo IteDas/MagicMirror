@@ -12,7 +12,7 @@ Module.register("calendar", {
 	// Define module defaults
 	defaults: {
 		showLocation: false,
-		filterRegexOnly: false,
+		filterRegexOnly: false, //refactor name?
 		maximumEntries: 10, // Total Maximum Entries
 		maximumNumberOfDays: 365,
 		displaySymbol: true,
