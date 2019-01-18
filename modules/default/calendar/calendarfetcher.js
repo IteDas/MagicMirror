@@ -8,7 +8,7 @@
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
 
-var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntries, maximumNumberOfDays, auth) {
+var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntries, maximumNumberOfDays, auth, showLocation, filterRegexOnly) {
 	var self = this;
 
 	var reloadTimer = null;
@@ -60,7 +60,7 @@ var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntri
 				return;
 			}
 
-			// console.log(data);
+			 //console.log(data);
 			newEvents = [];
 
 			var limitFunction = function(date, i) {return i < maximumEntries;};
@@ -111,11 +111,16 @@ var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntri
 					}
 
 					var title = "Event";
-					if (event.summary) {
-						title = (typeof event.summary.val !== "undefined") ? event.summary.val : event.summary;
-					} else if(event.description) {
-						title = event.description;
+					 if (event.summary) {
+					 	title = (typeof event.summary.val !== "undefined") ? event.summary.val : event.summary;
+					 } else if(event.description) {
+					 	title = event.description;
 					}
+					//console.log(event.location);
+					if ( event.location && showLocation){
+						title += " (" + event.location +")";
+					}
+
 
 					var excluded = false,
 						dateFilter = null;
@@ -152,14 +157,16 @@ var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntri
 						} else {
 							filter = filter.toLowerCase();
 						}
-
-						if (testTitleByFilter(testTitle, filter, useRegex, regexFlags)) {
+						tResult = testTitleByFilter(testTitle, filter, useRegex, regexFlags, filterRegexOnly);
+						if (tResult == 1) {
 							if (until) {
 								dateFilter = until;
 							} else {
 								excluded = true;
 							}
 							break;
+						} else if (tResult){
+							title = tResult;
 						}
 					}
 
@@ -315,17 +322,21 @@ var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntri
 		return false;
 	};
 
-	var testTitleByFilter = function (title, filter, useRegex, regexFlags) {
+	var testTitleByFilter = function (title, filter, useRegex, regexFlags, filterRegexOnly) {
 		if (useRegex) {
 			// Assume if leading slash, there is also trailing slash
 			if (filter[0] === "/") {
 				// Strip leading and trailing slashes
 				filter = filter.substr(1).slice(0, -1);
 			}
-
 			filter = new RegExp(filter, regexFlags);
-
-			return filter.test(title);
+			if(filterRegexOnly){
+				const test = / *\([^)]*\) ([^\s]+) */gi;
+				//console.log(filter);
+				return title.replace(test, "");
+			} else{
+				return filter.test(title);
+			}
 		} else {
 			return title.includes(filter);
 		}

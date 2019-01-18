@@ -11,6 +11,8 @@ Module.register("calendar", {
 
 	// Define module defaults
 	defaults: {
+		showLocation: false,
+		filterRegexOnly: false,
 		maximumEntries: 10, // Total Maximum Entries
 		maximumNumberOfDays: 365,
 		displaySymbol: true,
@@ -476,6 +478,8 @@ Module.register("calendar", {
 	 */
 	addCalendar: function (url, auth, calendarConfig) {
 		this.sendSocketNotification("ADD_CALENDAR", {
+			showLocation: calendarConfig.showLocation || this.config.showLocation,
+			filterRegexOnly: calendarConfig.filterRegexOnly || this.config.filterRegexOnly,
 			url: url,
 			excludedEvents: calendarConfig.excludedEvents || this.config.excludedEvents,
 			maximumEntries: calendarConfig.maximumEntries || this.config.maximumEntries,
