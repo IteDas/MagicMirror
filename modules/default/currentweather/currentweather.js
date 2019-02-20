@@ -28,6 +28,10 @@ Module.register("currentweather",{
 		decimalSymbol: ".",
 		showHumidity: false,
 		degreeLabel: false,
+		showWing: true,
+		showSunset: true,
+		useOutdoorTemperature: false,
+		useOutdoorHumidity: false,
 		showIndoorTemperature: false,
 		showIndoorHumidity: false,
 		showFeelsLike: true,
@@ -105,6 +109,7 @@ Module.register("currentweather",{
 		this.sunriseSunsetIcon = null;
 		this.temperature = null;
 		this.indoorTemperature = null;
+		this.outdoorTemperature = null;
 		this.indoorHumidity = null;
 		this.weatherType = null;
 		this.feelsLike = null;
@@ -120,32 +125,39 @@ Module.register("currentweather",{
 		var small = document.createElement("div");
 		small.className = "normal medium";
 
-		var windIcon = document.createElement("span");
-		windIcon.className = "wi wi-strong-wind dimmed";
-		small.appendChild(windIcon);
+		if(this.config.showWind){
+			var windIcon = document.createElement("span");
+			windIcon.className = "wi wi-strong-wind dimmed";
+			small.appendChild(windIcon);
 
-		var windSpeed = document.createElement("span");
-		windSpeed.innerHTML = " " + this.windSpeed;
-		small.appendChild(windSpeed);
+			var windSpeed = document.createElement("span");
+			windSpeed.innerHTML = " " + this.windSpeed;
+			small.appendChild(windSpeed);
 
-		if (this.config.showWindDirection) {
-			var windDirection = document.createElement("sup");
-			if (this.config.showWindDirectionAsArrow) {
-				if(this.windDeg !== null) {
-					windDirection.innerHTML = " &nbsp;<i class=\"fa fa-long-arrow-down\" style=\"transform:rotate("+this.windDeg+"deg);\"></i>&nbsp;";
+			if (this.config.showWindDirection) {
+				var windDirection = document.createElement("sup");
+				if (this.config.showWindDirectionAsArrow) {
+					if(this.windDeg !== null) {
+						windDirection.innerHTML = " &nbsp;<i class=\"fa fa-long-arrow-down\" style=\"transform:rotate("+this.windDeg+"deg);\"></i>&nbsp;";
+					}
+				} else {
+					windDirection.innerHTML = " " + this.translate(this.windDirection);
 				}
-			} else {
-				windDirection.innerHTML = " " + this.translate(this.windDirection);
+				small.appendChild(windDirection);
 			}
-			small.appendChild(windDirection);
+			var spacer = document.createElement("span");
+			spacer.innerHTML = "&nbsp;";
+			small.appendChild(spacer);
 		}
-		var spacer = document.createElement("span");
-		spacer.innerHTML = "&nbsp;";
-		small.appendChild(spacer);
 
 		if (this.config.showHumidity) {
 			var humidity = document.createElement("span");
-			humidity.innerHTML = this.humidity;
+			if(this.config.useOutdoorHumidity && this.outdoorHumidity){
+					humidity.innerHTML = this.outdoorHumidity;
+			}
+			else {
+				humidity.innerHTML = this.humidity;
+			}
 
 			var spacer = document.createElement("sup");
 			spacer.innerHTML = "&nbsp;";
@@ -159,15 +171,18 @@ Module.register("currentweather",{
 			small.appendChild(humidityIcon);
 		}
 
-		var sunriseSunsetIcon = document.createElement("span");
-		sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon;
-		small.appendChild(sunriseSunsetIcon);
+		if(this.config.showSunset)
+		{
+			var sunriseSunsetIcon = document.createElement("span");
+			sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon;
+			small.appendChild(sunriseSunsetIcon);
 
-		var sunriseSunsetTime = document.createElement("span");
-		sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
-		small.appendChild(sunriseSunsetTime);
+			var sunriseSunsetTime = document.createElement("span");
+			sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
+			small.appendChild(sunriseSunsetTime);
+		}
+			wrapper.appendChild(small);
 
-		wrapper.appendChild(small);
 	},
 
 	// Override dom generator.
@@ -218,9 +233,13 @@ Module.register("currentweather",{
 
 		var temperature = document.createElement("span");
 		temperature.className = "bright";
-		temperature.innerHTML = " " + this.temperature.replace(".", this.config.decimalSymbol) + "&deg;" + degreeLabel;
+		if (this.config.useOutdoorTemperature && this.outdoorTemperature) {
+			temperature.innerHTML = " " + this.outdoorTemperature.replace(".", this.config.decimalSymbol) + "&deg;" + degreeLabel;
+		}
+		else {
+			temperature.innerHTML = " " + this.temperature.replace(".", this.config.decimalSymbol) + "&deg;" + degreeLabel;
+		}
 		large.appendChild(temperature);
-
 		if (this.config.showIndoorTemperature && this.indoorTemperature) {
 			var indoorIcon = document.createElement("span");
 			indoorIcon.className = "fa fa-home";
@@ -293,6 +312,14 @@ Module.register("currentweather",{
 		}
 		if (notification === "INDOOR_TEMPERATURE") {
 			this.indoorTemperature = this.roundValue(payload);
+			this.updateDom(this.config.animationSpeed);
+		}
+		if (notification === "OUTDOOR_TEMPERATURE") {
+			this.outdoorTemperature = this.roundValue(payload);
+			this.updateDom(this.config.animationSpeed);
+		}
+		if (notification === "OUTDOOR_HUMIDITY") {
+			this.outdoorHumidity = this.roundValue(payload);
 			this.updateDom(this.config.animationSpeed);
 		}
 		if (notification === "INDOOR_HUMIDITY") {
