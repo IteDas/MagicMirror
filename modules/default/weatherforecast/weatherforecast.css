@@ -1,11 +1,22 @@
 .weatherforecast .day {
   padding-left: 0;
   padding-right: 25px;
+
 }
 
+.weatherforecast {
+  display: block;
+margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px 0px 0px 0px;
+}
 .weatherforecast .weather-icon {
-  padding-right: 30px;
-  text-align: center;
+  /**padding-right: 60px;*/
+  text-align: left;
+  margin-left: -125px;
 }
 
 .weatherforecast .min-temp {
@@ -20,6 +31,8 @@
 
 .weatherforecast tr.colored .min-temp {
     color: #BCDDFF;
+
+
 }
 
 .weatherforecast tr.colored .max-temp {

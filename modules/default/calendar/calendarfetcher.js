@@ -332,9 +332,9 @@ var CalendarFetcher = function(url, reloadInterval, excludedEvents, maximumEntri
 			filter = new RegExp(filter, regexFlags);
 			if(filterRegexOnly){
 				//WHY is this not working with filter? strange
-				const test = / *\([^)]*\) ([^\s]+) */gi;
-				//console.log(filter);
-				return title.replace(test, "");
+				const test = /[A-Z]+\s-\s[A-Z]*\s\([A-Za-z ]*\s\([A-Z]*\)\s-\s|\([A-Z]+\)*/gi;
+				var replaced = title.replace(test, "")
+				return replaced;
 			} else{
 				return filter.test(title);
 			}

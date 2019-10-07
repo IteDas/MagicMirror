@@ -10,5 +10,112 @@
  *****************************************************/
 
  body {
- 	
+   text-shadow: 1px 1px #555555;
+ }
+
+
+ a[href^="http://maps.google.com/maps"]{display:none !important}
+ a[href^="https://maps.google.com/maps"]{display:none !important}
+
+  .gmnoprint a, .gmnoprint span, .gm-style-cc {
+      display:none;
+  }
+  .gmnoprint div {
+      background:none !important;
+  }
+
+ @font-face{
+  	  font-family: SF;
+  	  src: url("/fonts/SF-Pro-Display-Light.otf") format("opentype");
+  	}
+
+
+  .weatherforecast .weather-icon {
+      padding-right: 30px;
+      left: 0px;
+      text-align: center;
+    }
+
+
+ .currentweather .weathericon {
+   position: absolute;
+   z-index: 0;
+   height: 120px;
+   margin-top: -30px;
+   margin-left: -125px;
+   right: 60px;
+ }
+
+ .weathericon {
+   position: absolute;
+   left: 50px;
+   z-index: 1;
+   margin-top: -15px;
+   height: 35px;
+   -webkit-svg-shadow: 0 0 7px #53BE12;
+ }
+
+ .wi-day-sunny {
+ content: url("/css/icons/Mostly Sunny Icon Group.svg");
+ }
+
+ .wi-day-cloudy {
+ content: url("/css/icons/Partly Cloudy Icon Group.svg");
+ margin-left: -2px;
+ }
+
+ .wi-rain {
+ content: url("/css/icons/Heavy Rain Icon Group.svg");
+ }
+
+ .wi-night-clear {
+ content: url("/css/icons/Clear Night Icon Group.svg");
+ }
+
+ .wi-night-cloudy {
+ content: url("/css/icons/Partly Cloudy Night Icon Group.svg");
+ }
+
+ .wi-cloudy {
+ content: url("/css/icons/Mostly Cloudy Icon Group.svg");
+ }
+
+ .wi-showers {
+ content: url("/css/icons/Scattered Showers Icon Group.svg");
+ }
+
+ .wi-thunderstorm {
+ content: url("/css/icons/Mix Rainfall Icon Group.svg");
+ }
+
+ .wi-snow {
+ content: url("/css/icons/Blizzard Icon Group.svg");
+ }
+
+ .wi-cloudy-windy {
+ content: url("/css/icons/Partly Cloudy Icon Group.svg");
+ }
+
+ .wi-night-rain {
+ content: url("/css/icons/Heavy Rain Night Icon Group.svg");
+ }
+
+ .wi-night-snow {
+ content: url("/css/icons/Blizzard Night Icon Group.svg");
+ }
+
+ .wi-night-thunderstorm {
+ content: url("/css/icons/Severe Thunderstorm Night Icon Group.svg");
+ }
+
+ .wi-night-showers {
+ content: url("/css/icons/Scattered Showers Night Icon Group.svg");
+ }
+
+ .wi-fog {
+ content: url("/css/icons/Fog Icon Group.svg");
+ }
+
+ .wi-night-alt-cloudy-windy {
+ content: url("/css/icons/Partly Cloudy Night Icon Group.svg");
  }

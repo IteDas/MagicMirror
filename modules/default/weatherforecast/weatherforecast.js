@@ -146,7 +146,7 @@ Module.register("weatherforecast",{
 			if(this.config.scale) {
 				switch(this.config.units) {
 				case "metric":
-					degreeLabel += " C";
+					degreeLabel = " &deg";
 					break;
 				case "imperial":
 					degreeLabel += " F";
